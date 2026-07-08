@@ -367,7 +367,7 @@
 <div id="oldSite">
   <div class="gdbar">
     <span class="tag">AN AD BY GASKINS DIGITAL</span>
-    <span class="txt">This awful website is <b>fake</b> — the point it makes isn't. Scroll down and flush it. ↓</span>
+    <span class="txt">This awful website is <b>fake</b>. The point it makes isn't. Scroll down and flush it. ↓</span>
   </div>
   <div class="ticker"><span>★ 24 HOUR EMERGENCY SERVICE ★ FREE ESTIMATES ★ SE HABLA POCO ESPAÑOL ★ CALL TODAY ★ ASK ABOUT OUR SENIOR DISCOUNT ★</span></div>
 
@@ -383,7 +383,7 @@
     <div class="gdcard" id="flushcard">
       <span class="k">Real talk from Gaskins Digital</span>
       <span class="t">If your website still looks like this, you're losing customers.</span>
-      <span class="s">75% of people judge a business by its website — and right now this one is
+      <span class="s">75% of people judge a business by its website, and right now this one is
         telling them you stopped trying in 2014. Flush it and see what we'd build instead.</span>
       <button class="lever" id="lever" onclick="startFlush()" title="Flush this website"><span class="lever-arm"></span>FLUSH THIS WEBSITE</button>
       <span class="tiny">(Go on. It's very satisfying.)</span>
@@ -744,7 +744,7 @@
     if(!stage) return;
 
     var reviews=[
-      {q:"Water heater died Friday night. New one in and running by Saturday morning — coffee was hot by nine.",n:"Darlene H.",t:"Water heater",c:"#C06A3C"},
+      {q:"Water heater died Friday night. New one in and running by Saturday morning. Coffee was hot by nine.",n:"Darlene H.",t:"Water heater",c:"#C06A3C"},
       {q:"My toilet ran for three straight years. Twenty minutes and it was silent. I can hear my own thoughts again.",n:"Ray T.",t:"Toilet repair",c:"#2F7CC0"},
       {q:"Showed up on time, wore shoe covers, and did not judge what my toddler flushed. A true professional.",n:"Brittany C.",t:"Drain rescue",c:"#10283D"},
       {q:"Told me about the $40 fix before the $400 one. You don't forget a plumber like that.",n:"Earl W.",t:"Leak repair",c:"#C06A3C"},
@@ -817,7 +817,7 @@
       var dots=dotsEl.children;
       for(var k=0;k<dots.length;k++) dots[k].setAttribute('aria-current',k===active?'true':'false');
       countEl.textContent=(active+1)+' / '+len;
-      statusL.textContent='Review by '+reviews[active].n+' — '+(active+1)+' of '+len;
+      statusL.textContent='Review by '+reviews[active].n+', '+(active+1)+' of '+len;
     }
     function go(i){
       active=((i%len)+len)%len;
