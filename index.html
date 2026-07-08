@@ -1,0 +1,914 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smith Plumbing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&family=Inter:wght@400;500;600&family=Chakra+Petch:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#10283D; --copper:#C06A3C; --water:#2F7CC0; --steel:#5D6B79;
+    --offwhite:#F6F8FA; --line:#E3E8EE;
+    --gd-indigo:#6366F1; --gd-violet:#8B5CF6; --gd-surface:#15151C;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{overflow-x:hidden}
+
+  /* ============ STATE SWITCH ============ */
+  #newSite{display:none}
+  body.after #oldSite{display:none}
+  body.after #newSite{display:block}
+
+  /* ============ 2014 BEFORE ============ */
+  #oldSite{
+    font-family:"Times New Roman",Times,serif;
+    background:#1b6ec2;
+    background-image:repeating-linear-gradient(45deg,#1b6ec2 0 18px,#2277cc 18px 36px);
+    color:#000; text-align:center; padding:14px; min-height:100vh;
+  }
+  .ticker{background:#ffd800;border:3px ridge #b38f00;color:#7a1500;font-family:Arial,sans-serif;
+    font-weight:bold;font-size:14px;padding:6px;white-space:nowrap;overflow:hidden}
+  .ticker span{display:inline-block;padding-left:100%;animation:scroll 14s linear infinite}
+  @keyframes scroll{to{transform:translateX(-100%)}}
+  .paper{max-width:760px;margin:14px auto;background:#fffbe8;border:4px double #003366;padding:20px 16px}
+  .wordart{font-family:"Comic Sans MS","Comic Sans",cursive;font-size:44px;font-weight:bold;
+    color:#ffcc00;-webkit-text-stroke:1.5px #003366;text-shadow:3px 3px 0 #cc0000;line-height:1.1}
+  .subwa{font-family:"Comic Sans MS",cursive;color:#006600;font-size:19px;font-weight:bold;margin-top:4px}
+  .clip{font-size:56px;letter-spacing:8px;margin:10px 0}
+  .callnow{font-family:Arial,sans-serif;font-size:30px;font-weight:bold;color:#cc0000;
+    background:#ffff66;border:3px outset #999;display:inline-block;padding:6px 16px;margin:8px 0}
+  .blink{animation:blink 1s steps(2,start) infinite;color:#cc0000;font-weight:bold;font-family:Arial,sans-serif}
+  @keyframes blink{to{visibility:hidden}}
+  #oldSite hr{border:0;border-top:2px groove #003366;margin:14px 0}
+  #oldSite p{font-size:16px;margin:8px 0;line-height:1.5}
+  #oldSite a{color:#0000ee;text-decoration:underline;font-weight:bold}
+  .oldbtn{font-family:Arial,sans-serif;font-size:14px;background:#dcdcdc;border:3px outset #bbb;
+    padding:5px 12px;color:#000;cursor:pointer}
+  .services14{font-family:Arial,sans-serif;font-size:15px;text-align:left;display:inline-block;
+    margin:6px auto;line-height:1.9}
+  .counter{font-family:"Courier New",monospace;background:#000;color:#00ff66;
+    display:inline-block;padding:3px 8px;border:2px inset #444;font-size:14px}
+  .fineprint{font-family:Arial,sans-serif;font-size:11px;color:#333;margin-top:14px}
+
+  /* ============ TAKEOVER OVERLAY ============ */
+  #takeover{position:fixed;inset:0;z-index:9000;display:none;
+    background:radial-gradient(120% 120% at 30% 20%,var(--gd-violet),var(--gd-indigo) 55%,var(--gd-surface));
+    color:#fff;flex-direction:column;align-items:center;justify-content:center;
+    font-family:"Chakra Petch",sans-serif;padding:24px;text-align:center;opacity:0;transition:opacity .35s}
+  #takeover.show{display:flex;opacity:1}
+  #takeover .brand{font-size:clamp(26px,6vw,46px);font-weight:700;letter-spacing:2px}
+  #takeover .brand b{color:#fff}
+  #takeover .dot{color:#c7c2ff}
+  #takeover .status{font-family:Inter,sans-serif;font-size:15px;margin-top:18px;
+    min-height:22px;color:#e7e5ff;font-weight:500}
+  #bar{width:min(420px,80vw);height:8px;background:rgba(255,255,255,.22);border-radius:99px;
+    margin-top:16px;overflow:hidden}
+  #barFill{height:100%;width:0;background:#fff;border-radius:99px;transition:width .25s linear}
+  .scan{position:fixed;inset:0;z-index:8999;pointer-events:none;background:#fff;
+    transform:translateX(-100%);display:none}
+  .scan.wipe{display:block;animation:wipe .7s ease forwards}
+  @keyframes wipe{to{transform:translateX(100%)}}
+
+  /* ============ MODERN AFTER ============ */
+  #newSite{font-family:Inter,sans-serif;color:var(--navy);background:#fff;line-height:1.6}
+  #newSite h1,#newSite h2,#newSite h3{font-family:Barlow,sans-serif;line-height:1.08;letter-spacing:-.01em}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+  .nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:70px}
+  .logo{display:flex;align-items:center;gap:10px;font-family:Barlow;font-weight:800;font-size:20px;color:var(--navy)}
+  .logo .mark{flex:0 0 auto;display:block;filter:drop-shadow(0 3px 8px rgba(16,40,61,.25))}
+  .navlinks{display:flex;gap:26px;align-items:center;font-weight:500;font-size:15px;color:var(--steel)}
+  .navlinks a{color:var(--steel);text-decoration:none}
+  .navlinks a:hover{color:var(--navy)}
+  .btn{font-family:Barlow;font-weight:700;font-size:15px;border:0;border-radius:11px;
+    padding:12px 22px;cursor:pointer;text-decoration:none;display:inline-block;position:relative;
+    transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+  .btn-primary{background:linear-gradient(135deg,#E8874A 0%,#C05A28 100%);color:#fff;
+    box-shadow:0 10px 26px -10px rgba(224,121,63,.6),inset 0 1px 0 rgba(255,255,255,.28)}
+  .btn-primary:hover{transform:translateY(-2px);
+    background:linear-gradient(135deg,#F09355 0%,#C9602C 100%);
+    box-shadow:0 18px 38px -10px rgba(224,121,63,.75),inset 0 1px 0 rgba(255,255,255,.28)}
+  .btn-primary:active{transform:translateY(0) scale(.98)}
+  .btn-ghost{background:transparent;color:var(--navy);border:2px solid var(--navy)}
+  .btn-glass{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.4);color:#fff;
+    backdrop-filter:blur(6px)}
+  .btn-glass:hover{background:rgba(255,255,255,.16);border-color:#fff;transform:translateY(-2px)}
+  .btn-hero{font-size:18px;padding:17px 32px;border-radius:14px;overflow:hidden;
+    animation:ctaGlow 2.6s ease-in-out infinite}
+  .btn-hero::after{content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;
+    background:linear-gradient(105deg,transparent,rgba(255,255,255,.45),transparent);
+    transform:skewX(-20deg);animation:shine 3.4s ease-in-out infinite}
+  @keyframes shine{0%,55%{left:-80%}100%{left:140%}}
+  @keyframes ctaGlow{0%,100%{box-shadow:0 10px 26px -10px rgba(224,121,63,.55),inset 0 1px 0 rgba(255,255,255,.28)}
+    50%{box-shadow:0 16px 44px -6px rgba(232,135,74,.9),inset 0 1px 0 rgba(255,255,255,.28)}}
+
+  .hero{color:#fff;padding:84px 0 96px;position:relative;overflow:hidden;
+    background:
+      radial-gradient(60% 90% at 85% 10%,rgba(47,124,192,.26),transparent 62%),
+      radial-gradient(52% 70% at 8% 100%,rgba(224,121,63,.17),transparent 62%),
+      linear-gradient(158deg,#0A1D30 0%,#10283D 55%,#0D2A45 100%)}
+  .hero::after{content:"";position:absolute;right:-140px;top:-100px;width:460px;height:460px;
+    border:60px solid rgba(47,124,192,.12);border-radius:50%}
+  .hero-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.9fr);
+    gap:48px;align-items:center;position:relative;z-index:1}
+  .hero .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:Barlow;font-weight:600;
+    letter-spacing:.16em;font-size:12.5px;color:#F0A368;text-transform:uppercase;
+    background:rgba(224,121,63,.12);border:1px solid rgba(224,121,63,.35);
+    border-radius:99px;padding:7px 14px}
+  .hero .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#E8874A;
+    box-shadow:0 0 10px rgba(232,135,74,.9)}
+  .hero h1{font-size:clamp(38px,5.6vw,62px);font-weight:800;margin:18px 0 18px;max-width:16ch}
+  .hero h1 .hl{background:linear-gradient(92deg,#E8874A,#F5B27E);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{font-size:18.5px;color:#c6d2de;max-width:48ch;margin-bottom:30px}
+  .hero .cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .trust{display:flex;gap:10px;flex-wrap:wrap;margin-top:36px;font-size:13.5px;font-weight:500}
+  .trust span{display:flex;align-items:center;gap:8px;color:#c9d6e2;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+    padding:8px 14px;border-radius:99px}
+  .trust b{color:#E8874A;font-weight:700}
+
+  /* hero 3D photo cluster */
+  .hero-visual{position:relative;height:480px}
+  .hv-card{position:absolute;border-radius:20px;perspective:900px;
+    box-shadow:0 32px 64px -20px rgba(3,12,22,.75),0 10px 26px -10px rgba(224,121,63,.22)}
+  .hv-tilt{width:100%;height:100%;border-radius:20px;overflow:hidden;
+    border:4px solid rgba(255,255,255,.94);background:#0d2136;
+    transition:transform .5s cubic-bezier(.2,.8,.3,1)}
+  .hv-tilt img{width:100%;height:100%;object-fit:cover;display:block}
+  .hv-main{left:6%;top:5%;width:62%;height:80%;z-index:2;animation:bobM 7s ease-in-out infinite}
+  .hv-a{right:0;top:-2%;width:46%;height:36%;z-index:3;animation:bobA 6s ease-in-out .8s infinite}
+  .hv-b{right:5%;bottom:1%;width:42%;height:32%;z-index:3;animation:bobB 8s ease-in-out 1.6s infinite}
+  @keyframes bobM{0%,100%{transform:rotate(-2.5deg) translateY(0)}50%{transform:rotate(-2.5deg) translateY(-9px)}}
+  @keyframes bobA{0%,100%{transform:rotate(4deg) translateY(0)}50%{transform:rotate(4deg) translateY(-12px)}}
+  @keyframes bobB{0%,100%{transform:rotate(-5deg) translateY(0)}50%{transform:rotate(-5deg) translateY(-10px)}}
+  .hv-badge{position:absolute;z-index:6;font-family:Barlow;font-weight:700;border-radius:14px;
+    padding:11px 16px;backdrop-filter:blur(10px);background:rgba(13,30,48,.6);
+    border:1px solid rgba(255,255,255,.2);color:#fff;
+    box-shadow:0 16px 36px -14px rgba(0,0,0,.65);white-space:nowrap}
+  .hv-rating{left:-5%;bottom:16%;animation:bobA 7s ease-in-out .4s infinite}
+  .hv-rating .st{color:#F5A623;letter-spacing:2px}
+  .hv-rating small{display:block;font-family:Inter;font-weight:500;font-size:12px;color:#b9c8d6;margin-top:2px}
+  .hv-247{right:-3%;top:42%;display:flex;align-items:center;gap:10px;animation:bobB 6.5s ease-in-out 1.2s infinite}
+  .hv-247 .chip{background:linear-gradient(135deg,#E8874A,#C05A28);border-radius:9px;
+    padding:6px 9px;font-size:15px;box-shadow:0 6px 16px -6px rgba(224,121,63,.8)}
+  .hv-247 small{font-family:Inter;font-weight:500;font-size:12px;color:#b9c8d6}
+  .hero-visual .pipe-rig{left:-13%;right:auto;top:-4%;z-index:1}
+  .reveal{opacity:0;transform:translateY(22px)}
+  body.after .reveal{animation:rise .7s ease forwards}
+  body.after .reveal.d1{animation-delay:.05s}
+  body.after .reveal.d2{animation-delay:.15s}
+  body.after .reveal.d3{animation-delay:.25s}
+  @keyframes rise{to{opacity:1;transform:none}}
+
+  .section{padding:72px 0}
+  .kicker{font-family:Barlow;font-weight:600;letter-spacing:.16em;font-size:13px;
+    text-transform:uppercase;color:var(--copper)}
+  .section h2{font-size:clamp(28px,4vw,40px);font-weight:700;margin:10px 0 8px}
+  .lead{color:var(--steel);font-size:17px;max-width:56ch}
+
+  .services{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:36px}
+  .card{border:1px solid var(--line);border-radius:16px;padding:26px 24px;position:relative;
+    background:linear-gradient(180deg,#fff,#FAFBFC);transform-style:preserve-3d;
+    transition:box-shadow .25s ease;box-shadow:0 2px 10px -4px rgba(16,40,61,.08)}
+  .card:hover{box-shadow:0 26px 50px -18px rgba(16,40,61,.28),0 8px 22px -8px rgba(201,111,59,.22)}
+  .card::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;
+    background:linear-gradient(135deg,rgba(232,135,74,.7),rgba(47,124,192,.45));
+    -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+    mask-composite:exclude;opacity:0;transition:opacity .25s;pointer-events:none}
+  .card:hover::before{opacity:1}
+  .card .ic{width:52px;height:52px;border-radius:14px;font-size:24px;margin-bottom:14px;
+    background:linear-gradient(135deg,#F6E9DE,#E8F0F8);display:flex;align-items:center;
+    justify-content:center;transition:transform .25s ease;
+    box-shadow:0 4px 12px -4px rgba(16,40,61,.15)}
+  .card h3{font-size:19px;font-weight:700;margin-bottom:6px;transition:transform .25s ease}
+  .card p{color:var(--steel);font-size:15px;transition:transform .25s ease}
+  .card:hover .ic{transform:translateZ(36px) scale(1.08)}
+  .card:hover h3{transform:translateZ(24px)}
+  .card:hover p{transform:translateZ(14px)}
+
+  /* GASKINS stat band (the mini-ad) */
+  .band{background:var(--gd-surface);color:#fff;position:relative;overflow:hidden}
+  .band::before{content:"";position:absolute;inset:0;
+    background:radial-gradient(90% 140% at 85% 0%,rgba(139,92,246,.28),transparent 60%)}
+  .band .wrap{position:relative}
+  .band .kicker{color:#b7aaff}
+  .band h2{color:#fff}
+  .band .lead{color:#c9c6e6}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;margin-top:38px}
+  .stat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:26px}
+  .stat .n{font-family:Barlow;font-weight:800;font-size:44px;line-height:1;
+    background:linear-gradient(90deg,var(--gd-indigo),var(--gd-violet));-webkit-background-clip:text;
+    background-clip:text;color:transparent}
+  .stat .l{color:#c9c6e6;font-size:15px;margin-top:10px}
+  .gdcta{margin-top:44px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    padding-top:30px;border-top:1px solid rgba(255,255,255,.12)}
+  .gdcta .txt{font-family:"Chakra Petch",sans-serif;font-weight:600;font-size:18px}
+  .gdcta .txt b{background:linear-gradient(90deg,var(--gd-indigo),var(--gd-violet));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .btn-gd{background:linear-gradient(90deg,var(--gd-indigo),var(--gd-violet));color:#fff}
+
+  .foot{background:var(--navy);color:#8ea0b2;padding:40px 0;font-size:14px}
+  .foot .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;align-items:center}
+  .foot a{color:#fff;text-decoration:none;font-weight:600}
+
+  /* ============ FLOATING TOGGLE ============ */
+  #toggle{position:fixed;right:20px;bottom:20px;z-index:200;font-family:Barlow,sans-serif;
+    font-weight:700;font-size:15px;border:0;border-radius:99px;padding:15px 24px;cursor:pointer;
+    color:#fff;background:linear-gradient(90deg,var(--gd-indigo),var(--gd-violet));
+    box-shadow:0 10px 30px rgba(99,102,241,.45)}
+  #toggle.pulse{animation:pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+  body.after #toggle{background:#fff;color:var(--navy);border:2px solid var(--line);
+    box-shadow:0 6px 20px rgba(16,40,61,.18);animation:none}
+
+  /* ============ FLUSH FX ============ */
+  body.noscroll{overflow:hidden}
+  #oldSite.flushing{animation:flushDown 1.25s cubic-bezier(.5,0,.9,.42) forwards;
+    transform-origin:50% 42%;pointer-events:none}
+  @keyframes flushDown{
+    0%{transform:rotate(0) scale(1)}
+    25%{transform:rotate(-80deg) scale(.85)}
+    60%{transform:rotate(-380deg) scale(.42)}
+    100%{transform:rotate(-880deg) scale(0);opacity:0}
+  }
+  #flushFX{position:fixed;inset:0;z-index:8500;display:none;pointer-events:none;overflow:hidden}
+  #flushFX.go{display:block}
+  .whirlScale{position:absolute;left:50%;top:50%;width:240vmax;height:240vmax;
+    margin:-120vmax 0 0 -120vmax;transform:scale(0)}
+  #flushFX.go .whirlScale{animation:whirlIn 1.5s cubic-bezier(.55,0,.8,.5) forwards}
+  .whirl{width:100%;height:100%;border-radius:50%;opacity:.95;
+    background:conic-gradient(from 0deg,rgba(47,124,192,0),rgba(47,124,192,.5) 70deg,
+      rgba(214,236,255,.92) 115deg,rgba(21,90,150,.7) 195deg,rgba(47,124,192,0) 300deg)}
+  #flushFX.go .whirl{animation:whirlSpin .45s linear infinite}
+  .drainHole{position:absolute;left:50%;top:50%;width:34vmin;height:34vmin;margin:-17vmin 0 0 -17vmin;
+    border-radius:50%;background:radial-gradient(circle,#04101c 0 38%,rgba(4,16,28,0) 72%);transform:scale(0)}
+  #flushFX.go .drainHole{animation:holeIn 1.5s ease-in forwards}
+  @keyframes whirlIn{0%{transform:scale(0)}55%{transform:scale(.4)}100%{transform:scale(1.05)}}
+  @keyframes whirlSpin{to{transform:rotate(360deg)}}
+  @keyframes holeIn{0%,35%{transform:scale(0)}100%{transform:scale(1)}}
+  .bub{position:absolute;bottom:-70px;border-radius:50%;
+    background:radial-gradient(circle at 32% 30%,rgba(255,255,255,.95),rgba(170,215,255,.4) 62%,rgba(120,180,230,.12));
+    animation:bubRise linear forwards}
+  @keyframes bubRise{0%{transform:translateY(0) scale(.6);opacity:0}12%{opacity:1}
+    100%{transform:translateY(-115vh) scale(1.15);opacity:.15}}
+
+  /* ad framing on the 2014 site (deliberately modern = doesn't belong) */
+  .adbar{position:sticky;top:0;z-index:500;margin:-14px -14px 12px;background:#15151C;
+    font-family:Inter,sans-serif;padding:11px 18px;display:flex;align-items:center;
+    justify-content:center;gap:12px;flex-wrap:wrap;border-bottom:2px solid #6366F1;
+    box-shadow:0 10px 30px rgba(0,0,0,.35)}
+  .adbar .tag{font-family:"Chakra Petch",sans-serif;font-weight:700;font-size:11.5px;
+    letter-spacing:.14em;color:#fff;background:linear-gradient(90deg,#6366F1,#8B5CF6);
+    padding:5px 12px;border-radius:99px;white-space:nowrap}
+  .adbar .txt{font-size:14px;color:#D8D6F2;font-weight:500}
+  .adbar .txt b{color:#fff}
+  .adcard{background:#15151C;border-radius:16px;padding:26px 24px 22px;margin:18px auto 8px;
+    max-width:560px;font-family:Inter,sans-serif;color:#fff;text-align:center;position:relative;
+    border:1px solid rgba(139,92,246,.55);
+    box-shadow:0 18px 44px -14px rgba(99,102,241,.5),0 4px 14px rgba(0,0,0,.3)}
+  .adcard .k{font-family:"Chakra Petch",sans-serif;font-size:11px;letter-spacing:.18em;
+    color:#b7aaff;text-transform:uppercase;font-weight:700}
+  .adcard .t{display:block;font-family:"Chakra Petch",sans-serif;font-weight:700;font-size:22px;
+    line-height:1.3;margin:10px auto 8px;max-width:26ch}
+  .adcard .s{display:block;font-size:14px;color:#c9c6e6;line-height:1.55;margin:0 auto 18px;max-width:46ch}
+  .adcard .tiny{display:block;font-size:12px;color:#8f8bb0;margin-top:10px;font-style:italic}
+
+  /* flush lever on the 2014 site */
+  .lever{font-family:Arial,sans-serif;font-weight:bold;font-size:15px;color:#00317a;
+    background:linear-gradient(#f8f8f8,#c9ced4 55%,#eef1f4);border:3px outset #aab2bb;border-radius:14px;
+    padding:8px 16px 8px 10px;cursor:pointer;display:inline-flex;align-items:center;gap:9px}
+  .lever-arm{width:34px;height:11px;border-radius:6px;background:linear-gradient(#fff,#9aa4ae);
+    border:1px solid #7c8792;transform-origin:left center;transition:transform .3s;display:inline-block}
+  .lever:active .lever-arm,.lever.pulled .lever-arm{transform:rotate(38deg)}
+
+  /* ============ HERO DRIP (click to fix) ============ */
+  .pipe-rig{position:absolute;right:10%;top:0;width:60px;height:340px;cursor:pointer;z-index:2}
+  .pipe-v{position:absolute;left:50%;transform:translateX(-50%);top:-6px;width:22px;height:150px;
+    border-radius:0 0 8px 8px;background:linear-gradient(90deg,#7c3f1d,#e09763 45%,#94512a);
+    box-shadow:0 6px 18px rgba(0,0,0,.35)}
+  .pipe-joint{position:absolute;left:50%;transform:translateX(-50%);top:96px;width:34px;height:26px;
+    border-radius:6px;background:linear-gradient(90deg,#8a4a24,#f0b285 45%,#9c582e)}
+  .drop{position:absolute;left:50%;top:150px;width:11px;height:14px;margin-left:-5.5px;
+    border-radius:50% 50% 60% 60%;background:radial-gradient(circle at 35% 30%,#bfe3ff,#5fa8dd 70%);
+    opacity:0;animation:drip 2.6s ease-in infinite}
+  .drop.d2{animation-delay:1.3s}
+  @keyframes drip{0%{transform:translateY(0) scale(.4);opacity:0}12%{opacity:1;transform:translateY(2px) scale(1)}
+    22%{transform:translateY(4px) scale(1)}70%{transform:translateY(150px);opacity:1}78%{opacity:0}100%{opacity:0}}
+  .ripple{position:absolute;left:50%;top:300px;width:40px;height:10px;margin-left:-20px;
+    border:2px solid rgba(120,180,230,.55);border-radius:50%;opacity:0;animation:rip 2.6s ease-out infinite}
+  .ripple.r1{animation-delay:1.75s}
+  .ripple.r2{animation-delay:3.05s}
+  @keyframes rip{0%{transform:scale(.2);opacity:.8}40%{opacity:.4}100%{transform:scale(1.7);opacity:0}}
+  .wrenchy{position:absolute;left:-16px;top:92px;font-size:30px;opacity:0;transform:rotate(-45deg);transition:.2s}
+  .fixnote{position:absolute;right:54px;top:104px;width:180px;background:#fff;color:var(--navy);
+    font-size:13px;font-weight:600;padding:9px 12px;border-radius:10px;opacity:0;transform:translateY(6px);
+    transition:.3s;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+  .pipe-rig.fixed .drop,.pipe-rig.fixed .ripple{animation:none;opacity:0}
+  .pipe-rig.fixed .wrenchy{opacity:1;animation:tighten .5s ease 3}
+  .pipe-rig.fixed .fixnote{opacity:1;transform:none}
+  @keyframes tighten{0%,100%{transform:rotate(-45deg)}50%{transform:rotate(-5deg)}}
+  @media (max-width:900px){.pipe-rig{display:none}
+    .hero-grid{grid-template-columns:minmax(0,1fr);gap:10px}
+    .hero-copy{min-width:0}
+    .hero-visual{height:400px;max-width:440px;margin:30px auto 0;width:100%}}
+
+  /* ============ REVIEWS DECK ============ */
+  .reviews{background:var(--offwhite)}
+  .gstars{display:flex;align-items:center;gap:12px;margin-top:16px;flex-wrap:wrap}
+  .gstars .score{font-family:Barlow;font-weight:800;font-size:34px}
+  .gstars .st{color:#F5A623;font-size:22px;letter-spacing:3px}
+  .gstars .cnt{color:var(--steel);font-size:14px;font-weight:500}
+  .deck-bleed{position:relative;left:50%;transform:translateX(-50%);overflow-x:clip;
+    overflow-y:visible;margin-top:26px}
+  .deck-stage{position:relative;margin:0 auto;outline:none}
+  .deck-card{position:absolute;bottom:0;left:50%;perspective:1200px;touch-action:pan-y;
+    user-select:none;-webkit-user-select:none;cursor:grab;
+    transition:transform 560ms cubic-bezier(.3,1.25,.45,1),opacity 340ms ease}
+  .deck-card:active{cursor:grabbing}
+  .deck-card-3d{width:100%;height:100%;transform:rotateX(10deg);border-radius:18px;background:#fff;
+    border:1px solid var(--line);padding:9% 9% 8%;display:flex;flex-direction:column;
+    box-shadow:0 24px 50px -16px rgba(16,40,61,.25),0 6px 18px -6px rgba(16,40,61,.12)}
+  .deck-card.is-active .deck-card-3d{border-color:rgba(192,106,60,.45);
+    box-shadow:0 36px 74px -18px rgba(16,40,61,.38),0 10px 26px -8px rgba(192,106,60,.3)}
+  .rv-stars{color:#F5A623;font-size:1.05em;letter-spacing:.18em;margin-bottom:.55em}
+  .rv-quote{flex:1;font-size:.98em;line-height:1.5;color:var(--navy);overflow:hidden}
+  .rv-foot{display:flex;align-items:center;gap:.6em;margin-top:.8em}
+  .rv-av{width:2.3em;height:2.3em;border-radius:50%;color:#fff;font-family:Barlow;font-weight:700;
+    display:flex;align-items:center;justify-content:center;font-size:.95em;flex:0 0 auto}
+  .rv-who b{display:block;font-size:.9em}
+  .rv-who i{font-style:normal;color:var(--steel);font-size:.78em}
+  .deck-ui{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:18px}
+  .deck-arrow{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#fff;
+    cursor:pointer;font-size:22px;line-height:1;color:var(--navy);display:flex;align-items:center;justify-content:center}
+  .deck-arrow:hover{border-color:var(--copper);color:var(--copper)}
+  .deck-dots{display:flex;gap:8px}
+  .deck-dot{width:9px;height:9px;border-radius:50%;border:0;padding:0;background:#c9d4de;cursor:pointer;transition:.2s}
+  .deck-dot[aria-current="true"]{background:var(--copper);transform:scale(1.3)}
+  .deck-count{display:none;font-size:14px;color:var(--steel);font-weight:600;min-width:44px;text-align:center}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .deck-stage:focus-visible .deck-card.is-active .deck-card-3d{outline:3px solid var(--copper);outline-offset:3px}
+
+  @media (max-width:640px){.navlinks{display:none}.hero{padding:64px 0 72px}
+    .hero .cta{flex-direction:column;align-items:stretch}
+    .hero .cta .btn{text-align:center}
+    .deck-dots{display:none}.deck-count{display:block}}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition:none!important}}
+</style>
+</head>
+<body class="before">
+
+<!-- ===================== 2014 BEFORE ===================== -->
+<div id="oldSite">
+  <div class="adbar">
+    <span class="tag">AN AD BY GASKINS DIGITAL</span>
+    <span class="txt">This awful website is <b>fake</b> — the point it makes isn't. Scroll down and flush it. ↓</span>
+  </div>
+  <div class="ticker"><span>★ 24 HOUR EMERGENCY SERVICE ★ FREE ESTIMATES ★ SE HABLA POCO ESPAÑOL ★ CALL TODAY ★ ASK ABOUT OUR SENIOR DISCOUNT ★</span></div>
+
+  <div class="paper">
+    <div class="wordart">Welcome To<br>SMITH PLUMBING!!!</div>
+    <div class="subwa">~ Your #1 Hometown Plumber Since 1988 ~</div>
+    <div class="clip">🔧🚽💧🔩</div>
+    <p><span class="blink">★ NOW BOOKING ★</span></p>
+
+    <div class="callnow">CALL NOW: (336) 555-1994</div>
+    <p><i>(We are closed on Sundays and during deer season)</i></p>
+
+    <div class="adcard" id="flushcard">
+      <span class="k">Real talk from Gaskins Digital</span>
+      <span class="t">If your website still looks like this, you're losing customers.</span>
+      <span class="s">75% of people judge a business by its website — and right now this one is
+        telling them you stopped trying in 2014. Flush it and see what we'd build instead.</span>
+      <button class="lever" id="lever" onclick="startFlush()" title="Flush this website"><span class="lever-arm"></span>FLUSH THIS WEBSITE</button>
+      <span class="tiny">(Go on. It's very satisfying.)</span>
+    </div>
+
+    <hr>
+    <p><b>WE FIX:</b></p>
+    <div class="services14">
+      • Leaky Faucets &amp; Pipes<br>
+      • Toilets That Wont Stop Running<br>
+      • Water Heaters (gas AND electric!)<br>
+      • Clogged Drains &amp; Garbage Disposals<br>
+      • That Weird Smell In The Basement
+    </div>
+
+    <hr>
+    <p>Click here to <a href="#" onclick="return false">sign our guestbook</a> or
+       <a href="#" onclick="return false">email the webmaster</a>!</p>
+    <p><button class="oldbtn" onclick="return false">Get A Free Estimate</button>
+       &nbsp; <button class="oldbtn" onclick="return false">View Photos</button></p>
+
+    <hr>
+    <p><span class="blink">🚧</span> <b>UNDER CONSTRUCTION</b> <span class="blink">🚧</span><br>
+       <i>More pages coming soon!</i></p>
+    <p>You are visitor number: <span class="counter">00013427</span></p>
+
+    <div class="fineprint">
+      Best viewed in Internet Explorer 6 at 1024x768 &nbsp;|&nbsp; © 2014 Smith Plumbing<br>
+      This site made with Microsoft FrontPage
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TAKEOVER ===================== -->
+<div id="takeover">
+  <div class="brand">GASKINS <b>DIGITAL</b><span class="dot">.</span></div>
+  <div class="status" id="status">Analyzing this website…</div>
+  <div id="bar"><div id="barFill"></div></div>
+</div>
+<div class="scan" id="scan"></div>
+<div id="flushFX">
+  <div class="whirlScale"><div class="whirl"></div></div>
+  <div class="drainHole"></div>
+</div>
+
+<!-- ===================== MODERN AFTER ===================== -->
+<div id="newSite">
+  <nav class="nav">
+    <div class="wrap">
+      <div class="logo">
+        <svg class="mark" width="36" height="36" viewBox="0 0 36 36" aria-hidden="true">
+          <defs>
+            <linearGradient id="mkTile" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#1B3A57"/>
+              <stop offset="1" stop-color="#0C2136"/>
+            </linearGradient>
+            <linearGradient id="mkDrop" x1="0" y1="0" x2=".4" y2="1">
+              <stop offset="0" stop-color="#F2A566"/>
+              <stop offset="1" stop-color="#C05A28"/>
+            </linearGradient>
+          </defs>
+          <rect x="1" y="1" width="34" height="34" rx="10" fill="url(#mkTile)"/>
+          <path fill="url(#mkDrop)" d="M18 7.2c4.1 5 7 8.9 7 12.3a7 7 0 0 1-14 0c0-3.4 2.9-7.3 7-12.3Z"/>
+          <ellipse cx="15.4" cy="14.6" rx="1.7" ry="2.4" fill="#fff" opacity=".4" transform="rotate(-18 15.4 14.6)"/>
+        </svg>
+        Smith Plumbing
+      </div>
+      <div class="navlinks">
+        <a href="#services">Services</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#why">Why it matters</a>
+        <a href="#contact">Contact</a>
+        <a href="#contact" class="btn btn-primary" style="padding:10px 18px">Book online</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero" id="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow reveal d1">Licensed &amp; insured · Asheboro, NC</div>
+        <h1 class="reveal d1">Plumbing <span class="hl">done right</span> the first time.</h1>
+        <p class="reveal d2">Fast, honest service from a local crew that shows up when they say they will. No surprise fees, no runaround.</p>
+        <div class="cta reveal d2">
+          <a href="#contact" class="btn btn-primary btn-hero">Book a service call →</a>
+          <a href="tel:3365551994" class="btn btn-glass">Call (336) 555-1994</a>
+        </div>
+        <div class="trust reveal d3">
+          <span><b>✓</b> Same-day appointments</span>
+          <span><b>✓</b> Upfront pricing</span>
+          <span><b>✓</b> 5-star local reviews</span>
+        </div>
+      </div>
+      <div class="hero-visual reveal d3" id="heroVisual">
+        <div class="pipe-rig" id="pipeRig" title="That drip looks expensive&hellip; click it">
+          <div class="pipe-v"></div><div class="pipe-joint"></div>
+          <div class="drop"></div><div class="drop d2"></div>
+          <div class="ripple r1"></div><div class="ripple r2"></div>
+          <div class="wrenchy">🔧</div>
+          <div class="fixnote">Fixed. That's the Smith guarantee. ✓</div>
+        </div>
+        <div class="hv-card hv-main" data-depth="1">
+          <div class="hv-tilt"><img src="images/hero-wrench.jpg" alt="Pipe wrenches on a copper fitting"></div>
+        </div>
+        <div class="hv-card hv-a" data-depth="1.6">
+          <div class="hv-tilt"><img src="images/hero-taps.jpg" alt="Polished brass faucets"></div>
+        </div>
+        <div class="hv-card hv-b" data-depth="2.1">
+          <div class="hv-tilt"><img src="images/hero-tools.jpg" alt="Plumbing tools on a tile floor"></div>
+        </div>
+        <div class="hv-badge hv-rating">
+          <span class="st">★★★★★</span> 5.0
+          <small>128 local reviews</small>
+        </div>
+        <div class="hv-badge hv-247">
+          <span class="chip">24/7</span>
+          <span>Emergency<br><small>We pick up at 2am</small></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" id="services">
+    <div class="wrap">
+      <div class="kicker">What we do</div>
+      <h2>Every job, big or small.</h2>
+      <p class="lead">From a dripping faucet to a full repipe, we handle it clean and get it right.</p>
+      <div class="services">
+        <div class="card"><div class="ic">🚰</div><h3>Repairs &amp; leaks</h3><p>Faucets, pipes, fixtures, and the leaks you can't find.</p></div>
+        <div class="card"><div class="ic">🔥</div><h3>Water heaters</h3><p>Repair, replacement, and tankless upgrades, gas or electric.</p></div>
+        <div class="card"><div class="ic">🌀</div><h3>Drains &amp; sewer</h3><p>Clogs cleared and cameras run so it stays cleared.</p></div>
+        <div class="card"><div class="ic">🛠️</div><h3>Remodels</h3><p>Kitchen and bath rough-ins done to code, on schedule.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS: 3D card deck -->
+  <section class="section reviews" id="reviews">
+    <div class="wrap">
+      <div class="kicker">Neighbors talking</div>
+      <h2>Rated 5.0 by people two streets over.</h2>
+      <div class="gstars">
+        <span class="score">5.0</span>
+        <span class="st">★★★★★</span>
+        <span class="cnt">128 Google reviews · Asheboro, NC</span>
+      </div>
+    </div>
+    <div class="deck-bleed" id="deckBleed">
+      <div class="deck-stage" id="deckStage" role="group" aria-roledescription="carousel"
+           aria-label="Customer reviews" tabindex="0"></div>
+    </div>
+    <div class="deck-ui">
+      <button class="deck-arrow" id="deckPrev" aria-label="Previous review">‹</button>
+      <div class="deck-dots" id="deckDots"></div>
+      <div class="deck-count" id="deckCount"></div>
+      <button class="deck-arrow" id="deckNext" aria-label="Next review">›</button>
+    </div>
+    <p class="sr-only" id="deckStatus" aria-live="polite"></p>
+  </section>
+
+  <!-- GASKINS MINI-AD -->
+  <section class="section band" id="why">
+    <div class="wrap">
+      <div class="kicker">The difference a modern site makes</div>
+      <h2>You just watched it happen.</h2>
+      <p class="lead">Same plumber. Same phone number. The website is the only thing that changed, and that's usually the thing costing a business customers.</p>
+      <div class="stats">
+        <div class="stat"><div class="n">0.05s</div><div class="l">is all it takes for someone to form an opinion of your site.</div></div>
+        <div class="stat"><div class="n">75%</div><div class="l">of people judge a business's credibility by its website design.</div></div>
+        <div class="stat"><div class="n">88%</div><div class="l">won't come back to a site after one bad experience.</div></div>
+        <div class="stat"><div class="n">2×</div><div class="l">more likely to convert when a site is fast and mobile-friendly.</div></div>
+      </div>
+      <div class="gdcta">
+        <div class="txt">This rebuild was done by <b>Gaskins Digital</b>.</div>
+        <a href="https://gaskinsdigital.com" class="btn btn-gd">See what we can do for your business</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <div class="wrap" style="text-align:center">
+      <div class="kicker">Ready when you are</div>
+      <h2>Let's get it fixed.</h2>
+      <p class="lead" style="margin:8px auto 24px">Call, text, or book online. We'll give you a straight answer and a fair price.</p>
+      <a href="tel:3365551994" class="btn btn-primary" style="font-size:17px;padding:15px 30px">Call (336) 555-1994</a>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="wrap">
+      <div>© 2025 Smith Plumbing · Asheboro, NC · Licensed &amp; insured<br>
+        <span style="font-size:12px;opacity:.75">Photos: chimpwithcan &amp; alexbrn via Flickr (CC BY)</span></div>
+      <div>Site by <a href="https://gaskinsdigital.com">Gaskins Digital</a></div>
+    </div>
+  </footer>
+</div>
+
+<!-- ===================== TOGGLE ===================== -->
+<button id="toggle" class="pulse" onclick="flip()">✨ See the after</button>
+
+<script>
+  var body=document.body, over=document.getElementById('takeover'),
+      fill=document.getElementById('barFill'), statusEl=document.getElementById('status'),
+      scan=document.getElementById('scan'), toggle=document.getElementById('toggle');
+
+  var steps=[
+    "Old website: successfully flushed 🚽",
+    "Analyzing what survived…",
+    "Applying the Smith Plumbing brand…",
+    "Optimizing for mobile & speed…",
+    "Rebuilt by Gaskins Digital ✦"
+  ];
+
+  /* ============ FLUSH → TAKEOVER → REVEAL ============ */
+  var flushing=false;
+
+  function flip(){
+    if(body.classList.contains('after')){ revert(); return; }
+    startFlush();
+  }
+
+  function startFlush(){
+    if(flushing || body.classList.contains('after')) return;
+    flushing=true;
+    var lever=document.getElementById('lever');
+    if(lever) lever.classList.add('pulled');
+    toggle.classList.remove('pulse');
+    toggle.style.display='none';
+    body.classList.add('noscroll');
+    window.scrollTo(0,0);
+    var fx=document.getElementById('flushFX');
+    fx.classList.add('go');
+    spawnBubbles(fx);
+    setTimeout(function(){ document.getElementById('oldSite').classList.add('flushing'); },150);
+    setTimeout(runTakeover,1250);
+    setTimeout(function(){
+      fx.classList.remove('go');
+      var bubs=fx.querySelectorAll('.bub');
+      for(var i=0;i<bubs.length;i++) bubs[i].parentNode.removeChild(bubs[i]);
+    },2600);
+  }
+
+  function spawnBubbles(fx){
+    for(var i=0;i<16;i++){
+      var b=document.createElement('div');
+      b.className='bub';
+      var s=10+Math.random()*36;
+      b.style.width=b.style.height=s+'px';
+      b.style.left=(4+Math.random()*92)+'%';
+      b.style.animationDuration=(0.8+Math.random()*0.9)+'s';
+      b.style.animationDelay=(Math.random()*0.7)+'s';
+      fx.appendChild(b);
+    }
+  }
+
+  function runTakeover(){
+    over.classList.add('show');
+    fill.style.width='0';
+    var i=0, total=steps.length;
+    statusEl.textContent=steps[0];
+    var iv=setInterval(function(){
+      i++;
+      fill.style.width=Math.min(100,(i/(total-1))*100)+'%';
+      if(steps[i]) statusEl.textContent=steps[i];
+      if(i>=total-1){
+        clearInterval(iv);
+        setTimeout(finish,520);
+      }
+    },440);
+  }
+
+  function finish(){
+    scan.classList.add('wipe');
+    setTimeout(function(){
+      body.classList.add('after');
+      body.classList.remove('noscroll');
+      over.classList.remove('show');
+      window.scrollTo(0,0);
+      document.getElementById('oldSite').classList.remove('flushing');
+      var lever=document.getElementById('lever');
+      if(lever) lever.classList.remove('pulled');
+      flushing=false;
+    },260);
+    setTimeout(function(){
+      scan.classList.remove('wipe');
+      toggle.style.display='block';
+      toggle.textContent='← View the 2014 original';
+    },720);
+  }
+
+  function revert(){
+    body.classList.remove('after');
+    body.classList.remove('noscroll');
+    document.getElementById('oldSite').classList.remove('flushing');
+    var lever=document.getElementById('lever');
+    if(lever) lever.classList.remove('pulled');
+    flushing=false;
+    window.scrollTo(0,0);
+    toggle.textContent='✨ See the after';
+    toggle.classList.add('pulse');
+  }
+
+  /* ============ HERO DRIP EASTER EGG ============ */
+  (function(){
+    var rig=document.getElementById('pipeRig');
+    if(!rig) return;
+    rig.addEventListener('click',function(){
+      if(rig.classList.contains('fixed')) return;
+      rig.classList.add('fixed');
+      setTimeout(function(){ rig.classList.remove('fixed'); },6000);
+    });
+  })();
+
+  /* ============ HERO PHOTO CLUSTER PARALLAX ============ */
+  (function(){
+    var hero=document.getElementById('hero'), vis=document.getElementById('heroVisual');
+    if(!hero||!vis) return;
+    var cards=vis.querySelectorAll('.hv-card');
+    hero.addEventListener('mousemove',function(e){
+      var r=hero.getBoundingClientRect();
+      var nx=(e.clientX-r.left)/r.width-0.5;
+      var ny=(e.clientY-r.top)/r.height-0.5;
+      for(var i=0;i<cards.length;i++){
+        var d=parseFloat(cards[i].getAttribute('data-depth'))||1;
+        cards[i].querySelector('.hv-tilt').style.transform=
+          'translate('+(nx*16*d).toFixed(1)+'px,'+(ny*12*d).toFixed(1)+'px) '+
+          'rotateX('+(-ny*5*d).toFixed(2)+'deg) rotateY('+(nx*7*d).toFixed(2)+'deg)';
+      }
+    });
+    hero.addEventListener('mouseleave',function(){
+      for(var i=0;i<cards.length;i++) cards[i].querySelector('.hv-tilt').style.transform='';
+    });
+  })();
+
+  /* ============ 3D TILT ON SERVICE CARDS ============ */
+  (function(){
+    var cards=document.querySelectorAll('#services .card');
+    for(var i=0;i<cards.length;i++)(function(card){
+      card.addEventListener('mousemove',function(e){
+        var r=card.getBoundingClientRect();
+        var px=(e.clientX-r.left)/r.width-0.5;
+        var py=(e.clientY-r.top)/r.height-0.5;
+        card.style.transition='transform .1s ease-out';
+        card.style.transform='perspective(700px) rotateX('+(-py*10).toFixed(2)+'deg) rotateY('+(px*12).toFixed(2)+'deg) translateY(-4px)';
+      });
+      card.addEventListener('mouseleave',function(){
+        card.style.transition='transform .35s ease';
+        card.style.transform='';
+      });
+    })(cards[i]);
+  })();
+
+  /* ============ REVIEWS: 3D CARD DECK ============ */
+  (function(){
+    function $(id){ return document.getElementById(id); }
+    var stage=$('deckStage'), bleed=$('deckBleed'), dotsEl=$('deckDots'),
+        countEl=$('deckCount'), statusL=$('deckStatus');
+    if(!stage) return;
+
+    var reviews=[
+      {q:"Water heater died Friday night. New one in and running by Saturday morning — coffee was hot by nine.",n:"Darlene H.",t:"Water heater",c:"#C06A3C"},
+      {q:"My toilet ran for three straight years. Twenty minutes and it was silent. I can hear my own thoughts again.",n:"Ray T.",t:"Toilet repair",c:"#2F7CC0"},
+      {q:"Showed up on time, wore shoe covers, and did not judge what my toddler flushed. A true professional.",n:"Brittany C.",t:"Drain rescue",c:"#10283D"},
+      {q:"Told me about the $40 fix before the $400 one. You don't forget a plumber like that.",n:"Earl W.",t:"Leak repair",c:"#C06A3C"},
+      {q:"Booked online at 11pm, confirmed by 7am. This website works better than my garbage disposal ever did.",n:"Monica S.",t:"Disposal swap",c:"#2F7CC0"},
+      {q:"They found the weird smell in the basement. I will not elaborate. Five stars.",n:"Duane P.",t:"Investigation",c:"#10283D"},
+      {q:"Fixed the pipe AND explained what a P-trap is without making me feel dumb about it.",n:"Kathy M.",t:"Bath remodel",c:"#C06A3C"}
+    ];
+    var len=reviews.length, active=0, dealt=false, interacted=false, hovering=false;
+    var reduceMotion=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var cards=[];
+    for(var i=0;i<len;i++){
+      var r=reviews[i], el=document.createElement('div');
+      el.className='deck-card';
+      el.setAttribute('data-i',i);
+      el.innerHTML='<div class="deck-card-3d">'+
+        '<div class="rv-stars">★★★★★</div>'+
+        '<p class="rv-quote">“'+r.q+'”</p>'+
+        '<div class="rv-foot"><span class="rv-av" style="background:'+r.c+'">'+r.n.charAt(0)+'</span>'+
+        '<span class="rv-who"><b>'+r.n+'</b><i>'+r.t+' · Verified local review</i></span></div>'+
+        '</div>';
+      stage.appendChild(el);
+      cards.push(el);
+    }
+    for(var d=0;d<len;d++)(function(idx){
+      var dot=document.createElement('button');
+      dot.className='deck-dot';
+      dot.setAttribute('aria-label','Review '+(idx+1));
+      dot.onclick=function(){ go(idx); };
+      dotsEl.appendChild(dot);
+    })(d);
+
+    var G={};
+    function layout(){
+      var w=document.documentElement.clientWidth, narrow=w<640;
+      var maxVisible=narrow?5:7;
+      var mo=Math.min(Math.floor(maxVisible/2),Math.floor(len/2));
+      var cw=Math.round(Math.min(400,Math.max(250,w*(narrow?0.74:0.30))));
+      var spacing=Math.min(cw*0.5,Math.max(cw*0.14,(w*0.92-cw)/(2*mo)));
+      var ch=Math.round(cw*(narrow?1.02:0.92));
+      G={mo:mo,cw:cw,ch:ch,spacing:spacing,rotStep:7/mo};
+      bleed.style.width=w+'px';
+      stage.style.height=Math.max(260,ch+22+48)+'px';
+      for(var i=0;i<len;i++){
+        cards[i].style.width=cw+'px';
+        cards[i].style.height=ch+'px';
+        cards[i].style.fontSize=Math.round(cw*0.045)+'px';
+      }
+    }
+    function wrapOff(i){
+      var raw=i-active, alt=raw>0?raw-len:raw+len;
+      return Math.abs(alt)<Math.abs(raw)?alt:raw;
+    }
+    var dragX=0;
+    function render(instant){
+      for(var i=0;i<len;i++){
+        var el=cards[i], off=wrapOff(i), abs=Math.abs(off), isA=off===0, hid=abs>G.mo;
+        var x=off*G.spacing+(isA?dragX:0)-G.cw/2;
+        var y=isA?-22:abs*10;
+        var rot=off*G.rotStep+(isA?dragX*0.02:0);
+        var s=(isA?1.03:0.94)*(1200/(1200+abs*150));
+        if(instant) el.style.transition='none';
+        el.style.transform='translate('+x.toFixed(1)+'px,'+y+'px) rotate('+rot.toFixed(2)+'deg) scale('+s.toFixed(3)+')';
+        el.style.opacity=hid?0:1;
+        el.style.pointerEvents=hid?'none':'auto';
+        el.style.zIndex=100-abs;
+        el.classList.toggle('is-active',isA);
+        if(instant){ void el.offsetWidth; el.style.transition=''; }
+      }
+      var dots=dotsEl.children;
+      for(var k=0;k<dots.length;k++) dots[k].setAttribute('aria-current',k===active?'true':'false');
+      countEl.textContent=(active+1)+' / '+len;
+      statusL.textContent='Review by '+reviews[active].n+' — '+(active+1)+' of '+len;
+    }
+    function go(i){
+      active=((i%len)+len)%len;
+      interacted=true;
+      render();
+    }
+
+    function stackAll(){
+      for(var i=0;i<len;i++){
+        cards[i].style.transform='translate('+(-G.cw/2)+'px,26px) scale(.72)';
+        cards[i].style.opacity=0;
+      }
+    }
+    layout();
+    stackAll();
+
+    function dealIn(){
+      if(dealt) return;
+      dealt=true;
+      for(var i=0;i<len;i++) cards[i].style.transitionDelay=Math.abs(wrapOff(i))*80+'ms';
+      render();
+      setTimeout(function(){
+        for(var i=0;i<len;i++) cards[i].style.transitionDelay='';
+      },1300);
+    }
+    if('IntersectionObserver' in window){
+      var io=new IntersectionObserver(function(es){
+        for(var i=0;i<es.length;i++) if(es[i].isIntersecting){ dealIn(); io.disconnect(); break; }
+      },{threshold:0.25});
+      io.observe(stage);
+    } else { dealIn(); }
+
+    window.addEventListener('resize',function(){
+      layout();
+      if(dealt) render(true); else stackAll();
+    });
+
+    /* drag (active card only) */
+    var pid=null, startX=0, lastX=0, lastT=0, vx=0, moved=false, clickGuard=false;
+    stage.addEventListener('pointerdown',function(e){
+      var card=e.target.closest ? e.target.closest('.deck-card') : null;
+      if(!card || !card.classList.contains('is-active') || !dealt) return;
+      pid=e.pointerId;
+      stage.setPointerCapture(pid);
+      startX=lastX=e.clientX; lastT=performance.now(); vx=0; moved=false;
+    });
+    stage.addEventListener('pointermove',function(e){
+      if(pid===null || e.pointerId!==pid) return;
+      var now=performance.now(), dt=Math.max(1,now-lastT);
+      vx=vx*0.8+((e.clientX-lastX)/dt*1000)*0.2;
+      lastX=e.clientX; lastT=now;
+      dragX=e.clientX-startX;
+      if(Math.abs(dragX)>4) moved=true;
+      render(true);
+    });
+    function endDrag(e){
+      if(pid===null || e.pointerId!==pid) return;
+      pid=null;
+      var swap=Math.abs(dragX)>Math.min(160,G.cw*0.22) || Math.abs(vx)>650;
+      var dir=(dragX<0 || vx<-650)?1:-1;
+      dragX=0; interacted=true;
+      if(moved){ clickGuard=true; setTimeout(function(){ clickGuard=false; },140); }
+      if(swap) go(active+dir); else render();
+    }
+    stage.addEventListener('pointerup',endDrag);
+    stage.addEventListener('pointercancel',endDrag);
+
+    /* click a side card to bring it forward */
+    stage.addEventListener('click',function(e){
+      if(clickGuard) return;
+      var card=e.target.closest ? e.target.closest('.deck-card') : null;
+      if(card && !card.classList.contains('is-active')) go(+card.getAttribute('data-i'));
+    });
+
+    stage.addEventListener('keydown',function(e){
+      if(e.key==='ArrowLeft'){ go(active-1); e.preventDefault(); }
+      if(e.key==='ArrowRight'){ go(active+1); e.preventDefault(); }
+    });
+    $('deckPrev').onclick=function(){ go(active-1); };
+    $('deckNext').onclick=function(){ go(active+1); };
+    stage.addEventListener('mouseenter',function(){ hovering=true; });
+    stage.addEventListener('mouseleave',function(){ hovering=false; });
+
+    if(!reduceMotion){
+      setInterval(function(){
+        if(!dealt || interacted || hovering || document.hidden) return;
+        active=(active+1)%len;
+        render();
+      },3800);
+    }
+  })();
+</script>
+</body>
+</html>
